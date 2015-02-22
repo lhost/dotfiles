@@ -1,0 +1,14 @@
+[push]
+	default = simple
+[user]
+	name = Lubomir Host
+	email = lubomir.host@gmail.com
+[color]
+	ui = true
+[core]
+	pager = less -x5 -r
+[diff]
+	noprefix = true
+	mnemonicprefix = true
+[http]
+#	proxy = http://proxy:3128
