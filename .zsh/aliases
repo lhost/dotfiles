@@ -1,0 +1,50 @@
+# $Id: zshrc-aliases,v 1.4 2002/02/24 02:51:07 8host Exp $
+
+# Set up aliases
+
+#unalias run-help
+#autoload run-help
+
+alias cvs-switch='eval `$HOME/bin/cvs-switch.sh`'
+alias cvs='cvs -q -z 9 -d $CVSROOT'
+
+alias f=finger
+alias tn=telnet
+
+unalias	ls &>/dev/null
+alias ls='ls -F -C --color=auto --show-control-chars --time-style=long-iso'
+alias l='ls -a'
+alias ll='ls -la --time-style=long-iso'
+alias dir='ls -la --time-style=long-iso'
+alias v='ls -l'
+alias s='screen -h 10000 -U'
+alias net='export TERM=vt100'
+alias S='less -S -R'
+alias x='startx &'
+# share files on the web:
+alias www='setfacl -s user::rw-,group::---,other::r--,u:www-data:r--'
+alias grep='grep --color=always --exclude="*.svn*"'
+
+unalias	pstree &> /dev/null
+alias	pstree='pstree -pGh'
+alias	lo=exit
+
+alias   rm='rm -i -v'
+#alias   cp='cp -i -v'
+alias cp='nocorrect cp'       # no spelling correction on cp
+#alias   mv='mv -i -v'
+alias mv='nocorrect mv'       # no spelling correction on mv
+alias mkdir='nocorrect mkdir' # no spelling correction on mkdir
+
+# 'cd' push directory onto the directory stack
+# 'cx' pop directory from the stack
+alias cd='pushd'
+alias cx='pushd -0 > /dev/null'
+alias ks='killall -STOP xlock'
+alias kc='killall -CONT xlock'
+
+#unalias run-help
+autoload run-help
+
+# ViM modeline
+# vim: ft=zsh
