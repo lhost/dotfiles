@@ -1,22 +1,26 @@
-# $Id: zshrc-aliases,v 1.4 2002/02/24 02:51:07 8host Exp $
 
-# Set up aliases
+# Easier navigation: .., ..., ...., ....., ~ and -
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."
+alias ~="cd ~" # `cd` is probably faster to type though
+alias -- -="cd -"
 
-#unalias run-help
-#autoload run-help
-
-alias cvs-switch='eval `$HOME/bin/cvs-switch.sh`'
-alias cvs='cvs -q -z 9 -d $CVSROOT'
-
-alias f=finger
-alias tn=telnet
+# Shortcuts
+alias dl="cd ~/Downloads"
+alias dt="cd ~/Desktop"
+alias db="cd ~/Dropbox"
+alias g="git"
+alias h="history"
+alias j="jobs"
 
 unalias	ls &>/dev/null
 alias ls='ls -F -C --color=auto --show-control-chars --time-style=long-iso'
 alias l='ls -a'
 alias ll='ls -la --time-style=long-iso'
 alias dir='ls -la --time-style=long-iso'
-alias v='ls -l'
 alias s='screen -h 10000 -U'
 alias net='export TERM=vt100'
 alias S='less -S -R'
