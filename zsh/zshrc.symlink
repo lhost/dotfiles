@@ -1,0 +1,50 @@
+#
+# Inspired by https://github.com/holman/dotfiles/blob/master/zsh/zshrc.symlink
+#
+# Changes: keep as little symlinks in $HOME as possible. Use ~/.config ~/.local etc.
+
+
+# shortcut to this dotfiles path is $ZSH
+#@export ZSH=$HOME/.dotfiles
+#export ZSH=$HOME/.config/dotfiles.git
+
+# your project folder that we can `c [tab]` to
+export PROJECTS=~/Code
+
+# Stash your environment variables in ~/.local/.zshrc. This means they'll stay out
+# of your main dotfiles repository (which may be public, like this one), but
+# you'll have access to them in your scripts.
+if [[ -a ~/.local/.zshrc ]]
+then
+  source ~/.local/.zshrc
+fi
+
+# all of our zsh files
+typeset -U config_files
+#@config_files=($ZSH/**/*.zsh)
+config_files=(~/.config/dotfiles.git/zsh/**/*.zsh ~/.config/zsh/**/*.zsh ~/.local/**/*.zsh)
+
+# load the path files
+for file in ${(M)config_files:#*/path.zsh}
+do
+  source $file
+done
+
+# load everything but the path and completion files
+for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+do
+  source $file
+done
+
+# initialize autocomplete here, otherwise functions won't be loaded
+#@autoload -U compinit
+#@compinit
+
+# load every completion after autocomplete loads
+for file in ${(M)config_files:#*/completion.zsh}
+do
+  source $file
+done
+
+unset config_files
+
