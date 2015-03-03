@@ -1,0 +1,619 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set runtimepath+=~/.config/vim/bundle/Vundle.vim
+set runtimepath+=~/.config/vim
+set runtimepath+=~/.local/vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+Plugin 'tpope/vim-fugitive'
+Plugin 'altercation/vim-colors-solarized'	" precision colorscheme for the vim text editor 
+											" http://ethanschoonover.com/solarized
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+"
+syntax on
+filetype plugin on
+
+function! Source(File)
+	silent! execute "source " . a:File
+endfunction
+
+let VIMRC_EXTRA="~/.local/vim/vimrc"
+if executable("uname") && executable("awk")
+	let machine = system("uname -n | awk 'BEGIN {ORS=\"\"} {print; }'")
+else
+	let machine = $HOSTNAME
+endif
+let machine = tolower(machine)
+let user = $USER
+
+call Source(VIMRC_EXTRA.".pre")
+call Source(VIMRC_EXTRA."-".user.".pre")
+call Source(VIMRC_EXTRA."-".machine.".pre")
+call Source(VIMRC_EXTRA."-".machine."-".user.".pre")
+call Source(VIMRC_EXTRA."")
+call Source(VIMRC_EXTRA."-".user)
+call Source(VIMRC_EXTRA."-".machine)
+call Source(VIMRC_EXTRA."-".machine."-".user)
+
+" used for searching documentation (~/.vim/doc/FEATURES.txt) etc.
+set runtimepath+=~/.vim
+
+" History and viminfo settings {{{
+if has("cmdline_hist") 
+	set history=10000
+endif
+if has("viminfo")
+	if filewritable(expand("$HOME/.local/vim/viminfo")) == 1 || 
+				\ filewritable(expand("$HOME/.local/vim/")) == 2
+		set viminfo=!,%,'5000,\"10000,:10000,/10000,n~/.local/vim/viminfo
+	else
+		set viminfo=
+	endif
+endif
+" Don't save backups of files.
+set nobackup
+set backupcopy=yes
+" }}}
+
+" Status line settings {{{
+":set ruler
+" Display a status-bar.
+set laststatus=2
+if has("statusline")
+	set statusline=%5*%{GetID()}%-1*#%{winnr()}\ %<%f\ %3*%m%1*%r%0*\ %2*%y%4*%w%0*%=[%b\ 0x%B]\ \ %8l,%10([%c%V/%{strlen(getline(line('.')))}]%)\ %P
+endif
+" }}}
+
+" Priority between files for file name completion (suffixes) {{{
+" Do not give .h low priority in command-line filename completion.
+set suffixes-=.h
+set suffixes+=.aux
+set suffixes+=.bbl
+set suffixes+=.blg
+set suffixes+=.log
+set suffixes+=.eps
+set suffixes+=.ps
+set suffixes+=.pdf
+
+" Ignore output of LaTex, compiler and vim swap files
+set wildignore+=*.dvi
+set wildignore+=*.pdf
+set wildignore+=*.o
+set wildignore+=*.ko
+set wildignore+=*.swp
+set wildignore+=*.aux
+set wildignore+=*.bbl
+set wildignore+=*.blg
+" }}}
+
+" The cursor is kept in the same column (if possible).  This applies to the
+" commands: CTRL-D, CTRL-U, CTRL-B, CTRL-F, "G", "H", "M", "L", , and to the
+" commands "d", "<<" and ">>" with a linewise operator, with "%" with a count
+" and to buffer changing commands (CTRL-^, :bnext, :bNext, etc.).  Also for an
+" Ex command that only has a line number, e.g., ":25" or ":+".
+set nostartofline
+
+" Automatically setting options in various files
+" WARNINNG: disable modeline if you are running vim version < 6.1.265 !!
+"           These are security problems. See http://www.guninski.com/vim1.html
+"                                                (reported by Georgi Guninski)
+" TODO: there is no way how to test vim patchlevel version, therefore we are
+"       not able determine vim version < 6.1.265
+set modeline
+
+" Available TAGS files
+set tags=./TAGS,./tags,tags
+
+" Don't add EOF at end of file
+set noendofline
+
+" Do case sensitive matching
+set noignorecase
+
+set showfulltag 
+
+set cmdheight=2
+set backspace=2
+set incsearch
+set report=0
+set showcmd showmatch showmode
+
+" Indent of 1 tab with size of 4 spaces
+set tabstop=4 
+set shiftwidth=4 
+
+" Need more undolevels ??
+" (default 100, 1000 for Unix, VMS, Win32 and OS/2)
+set undolevels=10000
+
+" Don't replace tab with spaces
+set noexpandtab 
+
+" Settings for mouse (gvim under Xwindows)
+set nomousefocus
+set mousehide
+set mousemodel=popup
+
+" Cursor always in the middle of the screen if GUI is not running
+if ! has("gui_running")
+	"set scrolloff=999
+	set scrolloff=10
+endif
+set sidescroll=5
+set sidescrolloff=1
+
+
+" Make window maximalized
+set winheight=100
+
+" The screen will not be redrawn while executing macros, registers
+" and other commands that have not been typed. To force an updates use |:redraw|.
+set lazyredraw
+
+" time out on mapping after one second, time out on key codes after
+" a tenth of a second
+set timeout timeoutlen=1000 ttimeoutlen=100
+
+" command completition
+set wildchar=<Tab>
+set wildmenu
+set wildmode=longest:full,full
+
+" Allow specified keys that move the cursor left/right to wrap to the
+" previous/next line when the cursor is on the first/last character in the
+" line. Allowed keys are 'h' and 'l', arrow keys are not allowed to wrap.
+set whichwrap=h,l
+
+" Customize display {{{
+" lastline	When included, as much as possible of the last line
+"			in a window will be displayed.  When not included, a
+"			last line that doesn't fit is replaced with "@" lines.
+"uhex		Show unprintable characters hexadecimal as <xx>
+"			instead of using ^C and ~C.
+set display+=lastline
+set display+=uhex
+" }}}
+
+" Vim beeping go to the hell... {{{
+set noerrorbells
+set visualbell
+set t_vb=
+" }}}
+" Set this, if you will open all windows for files specified
+" on the commandline at vim startup.
+if !exists("g:open_all_win")
+	let g:open_all_win=1
+endif
+
+" Settings for folding long lines
+if !exists("g:fold_long_lines")
+	let g:fold_long_lines=300
+endif
+
+" }}}
+
+" Keybord mappings {{{
+"
+" backspace fix
+noremap 	
+inoremap 	
+cnoremap 	
+" start of line
+"noremap <C-A>		i<Home>
+inoremap <C-A>		<Home>
+cnoremap <C-A>		<Home>
+" end of line
+noremap <C-E>		i<End>
+inoremap <C-E>		<End>
+" back one word
+inoremap <C-B>	<S-Left>
+" forward one word
+"inoremap <C-F>	<S-Right>
+
+" Switching between windows by pressing one time CTRL-X keys.
+noremap <C-X> <C-W><C-W>
+
+" Tip from http://vim.sourceforge.net/tips/tip.php?tip_id=173
+noremap <C-J> <C-W>j<C-W>_
+noremap <C-K> <C-W>k<C-W>_
+
+" Make Insert-mode completion more convenient:
+imap <C-L> <C-X><C-L>
+
+set remap
+map <C-O><C-O> :split 
+imap <C-O><C-O> <Esc>:split 
+
+" diakritika 
+":map <C-D><C-D> :so ~/.vim/diakritika.vim
+":imap <C-D><C-D> <Esc>:so ~/.vim/diakritika.vim
+
+" Open new window with file ~/.vimrc (ViM configuration file)
+map <C-O><C-K> :split ~/.vimrc<CR>
+imap <C-O><C-K> <Esc>:split ~/.vimrc<CR>
+" Open new window with dir ~/.vim (ViM configuration dir)
+map <C-O><C-V> :split ~/.vim<CR>
+imap <C-O><C-V> <Esc>:split ~/.vim<CR>
+
+" Safe delete line (don't add line to registers)
+":imap <C-D> <Esc>"_ddi
+imap <C-D> <Esc>:call SafeLineDelete()<CR>i
+
+" Search for the current Visual selection.
+vmap S y/<C-R>=escape(@",'/\')<CR>
+" replace selected text with text in register
+vnoremap p <Esc>:let current_reg = @"<CR>gvdi<C-R>=current_reg<CR><Esc>
+
+" Good pasting toggle {{{
+" From  Christopher Swingley <cswingle AT iarc.uaf.edu>
+" Whenever I want to paste something, I do:
+" ,f
+" i
+" <paste>
+" <esc>
+" ,f
+map ,f :set paste!<CR>:set paste?<CR>
+" }}}
+
+" Mappings for folding {{{
+" Open one foldlevel of folds in whole file
+" Note: 'Z' works like 'z' but for all lines in file
+noremap Zo mzggvGzo'z
+noremap ZO zR
+noremap Zc mzggvGzc'z
+noremap ZC zM
+noremap Zd mzggvGzd'z
+noremap ZD mzggvGzD'z
+noremap Za mzggvGza'z
+noremap ZA mzggvGzA'z
+noremap Zx mzggvGzx'z
+noremap ZX mzggvGzX'z
+" }}}
+
+" }}}
+
+" Settings for IMAP input method (IMAP plugin) {{{
+
+" detect iso-8859-2 encoding before latin1
+set fileencodings=ucs-bom,utf-8,iso-8859-2,windows-1250,latin1
+
+" set variable "b:input_method" to change input method
+" let b:input_method = "latin2"
+let b:input_method = &encoding
+
+" you may disable actions of IMAP plugin with variable b:disable_imap
+" 0 - enabled
+" 1 - disabled
+let b:disable_imap = 0
+
+call Source("~/.config/vim/plugin/imaps.vim")
+
+" }}}
+
+" New commands {{{
+command! -nargs=0 -range Indent          <line1>,<line2>call Indent()
+command! -nargs=0 -range FoldLongLines   <line1>,<line2>call FoldLongLines()
+command! -nargs=0 -range UnquoteMailBody <line1>,<line2>call UnquoteMailBody()
+command! -nargs=0 CallProg				call CallProg()
+command! -nargs=0 OpenAllWin			call OpenAllWin()
+command! -nargs=* ReadFileAboveCursor	call ReadFileAboveCursor(<f-args>)
+command! -nargs=* R						call ReadFileAboveCursor(<f-args>)
+command! -nargs=0 DiacriticsOn			call ChooseInputMethod(0)
+command! -nargs=0 DiacriticsOff			let b:disable_imap=1
+" }}}
+
+" Functions {{{
+
+" Function FoldLongLines() {{{
+"
+if version >= 600
+	function! FoldLongLines() range abort
+		let savelnum = line(".")
+		let lnum = a:firstline
+		let lend = a:lastline
+		if lnum == lend
+			" No visual area choosen --> whole file
+			let lnum = line(".")
+			let lend = line("$")
+			" Go to the begin of the file
+			exec "1go"
+		endif
+		while lnum <= lend
+			" Skip closed folds
+			if foldclosed(lnum) != -1
+				let lnum = foldclosedend(lnum) + 1
+				continue
+			endif
+			let dlzka = strlen(getline("."))
+			if dlzka >= g:fold_long_lines
+				" Create fold for one line
+				exec "normal zfl"
+			endif
+			let lnum = line(".")
+			" Move one line down
+			exec "normal j"
+			if lnum == lend
+				break
+			endif
+		endwhile
+		" ...and go back
+		exec "normal " . savelnum . "G"
+		redraw!
+	endfunction
+endif
+" FoldLongLines() }}}
+
+" Function OpenAllWin() {{{
+" Opens windows for all files in the command line.
+" Variable "opened" is used for testing, if window for file was already opened
+" or not. This is prevention for repeat window opening after ViM config file
+" reload.
+"
+function! OpenAllWin()
+	" save Vim option to variable
+	let s:save_split = &splitbelow
+	set splitbelow
+
+	let s:i = 1
+	if g:open_all_win == 1
+		while s:i < argc()
+			if bufwinnr(argv(s:i)) == -1	" buffer doesn't exists or doesn't have window
+				exec ":split " . escape(argv(s:i), ' \')
+				"echo "Current window is " . bufwinnr(s:i) 
+			endif
+			let s:i = s:i + 1
+		endwhile
+	endif
+
+	" force first window to be maximalized. Behaviour of vim has changed after
+	" 6.2(?) release, therefore next command is not needed for vim < 6.2(?)
+	exec "normal 2\<C-w>\<C-w>1\<C-w>\<C-w>"
+
+	" restore Vim option from variable
+	if s:save_split
+		set splitbelow
+	else
+		set nosplitbelow
+	endif
+endfunction
+" OpenAllWin() }}}
+
+" Function GetID() {{{
+" - used in statusline.
+" If you are root, function return "# " string --> it is showed at begin of
+"                                                  statusline
+" If you aren't root, function return empty string --> nothing is visible
+" Check for your name ID
+let g:get_id = $USER
+" If you are root, set to '#', else set to ''
+if g:get_id == "root"
+	let g:get_id = "# "
+else
+	let g:get_id = ""
+endif
+function! GetID()
+	return g:get_id
+endfunction
+" GetID() }}}
+
+" Function SmartBS() {{{
+"
+" This function comes from Benji Fisher <benji AT e-mathDOTAMSDOTorg>
+" http://vim.sourceforge.net/scripts/download.php?src_id=409
+" (modified/patched by: Lubomir Host 'rajo' <rajo AT platon.sk>
+"                       Srinath Avadhanula  <srinath AT fastmailDOTfm> )
+silent function! SmartBS()
+	let init = strpart(getline("."), 0, col(".")-1)
+	if exists("g:smartBS_" . &filetype)
+		silent exec "let matchtxt = matchstr(init, g:smartBS_" . &filetype . ")"
+		echo "SmartBS(" . matchtxt . ")"
+		if matchtxt != ''
+			let bstxt = substitute(matchtxt, '.', "\<bs>", 'g')
+			return bstxt
+		else
+			return "\<bs>"
+		endif
+	else
+		return "\<bs>"
+	endif
+endfunction
+
+" You can turn on smart backspacing in ftplugin by setting
+" g:smartBS_<filetype> variable and turning on mapping
+" inoremap <buffer> <BS> <C-R>=SmartBS()<CR>
+"
+" Example: TeX plugin
+"	" set regular expresion for Smart backspacing
+"	let g:smartBS_tex = '\(' .
+"			\ "\\\\[\"^'=v]{\\S}"      . '\|' .
+"			\ "\\\\[\"^'=]\\S"         . '\|' .
+" 			\ '\\v \S'                 . '\|' .
+"			\ "\\\\[\"^'=v]{\\\\[iI]}" . '\|' .
+"			\ '\\v \\[iI]'             . '\|' .
+"			\ '\\q \S'                 . '\|' .
+" 			\ '\\-'                    .
+"			\ '\)' . "$"
+"
+"	" map <BS> to function SmartBS()
+"	inoremap <buffer> <BS> <C-R>=SmartBS()<CR>
+
+" }}} 
+
+" Function ChooseInputMethod() {{{
+function! ChooseInputMethod(method)
+	let b:disable_imap=0
+	let g:available_methods = "&none\n&Tex-universal\n&tex-iso8859-2\n&iso8859-2\n&windows-1250\nunicode-&Html\n&UTF-8"
+
+	if a:method == 0
+		let choice = confirm("Choose input mapping:", g:available_methods, 1)
+	else
+		let choice = a:method
+	endif
+
+	if choice == 1
+		let b:input_method = "NONE"
+	elseif choice == 2
+		let b:input_method = "tex-universal"
+	elseif choice == 3
+		let b:input_method = "tex-iso8859-2"
+	elseif choice == 4
+		let b:input_method = "iso8859-2"
+	elseif choice == 5
+		let b:input_method = "windows-1250"
+	elseif choice == 6
+		let b:input_method = "unicode-html"
+	elseif choice == 7
+		let b:input_method = "UTF-8"
+	endif
+	
+	if choice == 1
+		let b:disable_imap = 1
+	elseif choice != 0
+		call UseDiacritics()
+	endif
+
+endfunction
+"}}}
+
+" Function UseDiacritics() {{{
+function! UseDiacritics()
+	let b:disable_imap = 0
+	call Source("~/.config/vim/modules/diacritics.vim")
+endfunction
+" }}}
+
+" Autocomands {{{
+if has("autocmd")
+
+" UGLY hack - preload templatefile.vim. This is needed for loading templates
+" for all buffers (when opening all windows for buffers)
+call Source("~/.vim/plugin/templatefile.vim")
+augroup TemplateSystem
+	autocmd!
+	au BufNewFile * call LoadTemplateFile()
+augroup END
+
+	" Autocomands for GUIEnter {{{
+	augroup GUIEnter
+	autocmd!
+	if has("gui_win32")
+		autocmd GUIEnter * simalt ~x
+	endif
+	augroup END
+	" }}}
+
+	" Autocomands for ~/.vimrc {{{
+	augroup VimConfig
+	autocmd!
+	" Reread configuration of ViM if file ~/.vimrc is saved
+	autocmd BufWritePost ~/.vimrc	so ~/.vimrc | exec "normal zv"
+	autocmd BufWritePost vimrc   	so ~/.vimrc | exec "normal zv"
+	augroup END
+	" }}}
+
+	" Autocomands for GnuPG (gpg) {{{ 
+	" Transparent editing of gpg encrypted files.
+	" By Wouter Hanegraaff <wouter@blub.net>,
+	" enhanced by Lubomir Host 'rajo' <rajo AT platon.sk>
+	" 
+	augroup GnuPG
+		autocmd!
+
+		" First make sure nothing is written to ~/.viminfo while editing
+		" an encrypted file.
+		" viminfo doesn't have local value, set global value instead
+		autocmd BufReadPre,FileReadPre		*.gpg,*.asc set viminfo=
+		" We don't want a swap file, as it writes unencrypted data to disk
+		autocmd BufReadPre,FileReadPre		*.gpg,*.asc setlocal noswapfile
+		" Switch to binary mode to read the encrypted file
+		autocmd BufReadPre,FileReadPre		*.gpg,*.asc setlocal bin
+		autocmd BufReadPre,FileReadPre		*.gpg,*.asc let ch_save = &ch | setlocal ch=2
+		autocmd BufReadPost,FileReadPost	*.gpg,*.asc '[,']!gpg --decrypt -q -a 2>/dev/null
+		" Switch to normal mode for editing
+		autocmd BufReadPost,FileReadPost	*.gpg,*.asc setlocal nobin
+		autocmd BufReadPost,FileReadPost	*.gpg,*.asc let &ch = ch_save | unlet ch_save
+		autocmd BufReadPost,FileReadPost	*.gpg,*.asc execute ":doautocmd BufReadPost " . expand("%:r")
+
+		" Convert all text to encrypted text before writing
+		autocmd BufWritePre,FileWritePre	*.gpg,*.asc '[,']!gpg --encrypt --default-recipient-self -q -a
+		" Undo the encryption so we are back in the normal text, directly
+		" after the file has been written.
+		autocmd BufWritePost,FileWritePost	*.gpg,*.asc undo
+	augroup END
+	" }}}
+
+endif " if has("autocmd")
+" }}} Autocomands
+
+" Colors {{{
+
+if has('gui_running')
+	"set background=light
+	set background=dark
+else
+	set background=dark
+endif
+
+colorscheme solarized
+
+hi StatusLine   term=bold,reverse cterm=bold,reverse
+hi StatusLineNC term=reverse      cterm=reverse
+hi User1        term=inverse,bold cterm=inverse,bold ctermfg=Red
+hi User2        term=bold         cterm=bold         ctermfg=Yellow
+hi User3        term=inverse,bold cterm=inverse,bold ctermfg=Blue
+hi User4        term=inverse,bold cterm=inverse,bold ctermfg=LightBlue
+hi User5        term=inverse,bold cterm=inverse,bold ctermfg=Red       ctermbg=Green
+hi Folded       term=standout     cterm=bold         ctermfg=Blue      ctermbg=Black
+hi FoldColumn   term=standout                        ctermfg=DarkBlue  ctermbg=Black 
+hi Comment      term=bold                            ctermfg=DarkCyan
+"" Parenthesis checking
+hi MatchParen   term=bold         cterm=bold,reverse ctermfg=DarkBlue  ctermbg=Black
+
+" }}}
+
+call Source(VIMRC_EXTRA.".post")
+call Source(VIMRC_EXTRA."-".user.".post")
+call Source(VIMRC_EXTRA."-".machine.".post")
+call Source(VIMRC_EXTRA."-".machine."-".user.".post")
+
+if exists("g:open_all_win")
+	if g:open_all_win == 1
+		" Open all windows only if we are not running (g)vimdiff
+		if match(v:progname, "diff") < 0
+			call OpenAllWin()
+		endif
+	endif
+	" turn g:open_all_win off after opening all windows
+	" it prevents reopen windows after 2nd sourcing .vimrc
+	let g:open_all_win = 0
+endif
+
+" Modeline {{{
+" vim:set ts=4:
+" vim600:fdm=marker fdl=0 fdc=3
+" }}}
+
