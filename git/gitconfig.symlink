@@ -118,6 +118,7 @@
 
 	# Include summaries of merged commits in newly created merge commit messages
 	log = true
+	conflictstyle = diff3
 
 [push]
 
@@ -150,3 +151,5 @@
 
 [include]
 	path = ~/.local/.git/config
+[credential]
+	helper = store
