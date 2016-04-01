@@ -1,0 +1,7 @@
+
+[mysql]
+comments = 1
+prompt=(\\u@\\h) [\\d]>\\_
+default-character-set = utf8
+auto-rehash
+
