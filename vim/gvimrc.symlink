@@ -3,3 +3,5 @@ colorscheme solarized
 "set winminheight=3
 let g:open_all_win=1
 
+" disable Ctrl+z (suspend gvim) and behave like Ctrl+x (decrease number)
+nnoremap <C-z> <C-x>
