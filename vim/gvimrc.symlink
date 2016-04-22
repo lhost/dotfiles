@@ -5,3 +5,15 @@ let g:open_all_win=1
 
 " disable Ctrl+z (suspend gvim) and behave like Ctrl+x (decrease number)
 nnoremap <C-z> <C-x>
+
+"fun! QuitPrompt()
+"	if has("gui_running") && tabpagenr("$") == 1 && winnr("$") == 1
+"		let choice = confirm("Close?", "&yes\n&no", 1)
+"		if choice == 1 | wq | endif
+"	else | wq | endif
+"endfun
+"nnoremap ZZ :call QuitPrompt()<cr>
+
+" disable ZZ completely
+nnoremap ZZ <Nop>
+
