@@ -20,7 +20,11 @@ if [ -z "`which dirname`" ]; then
 	exit 1
 fi
 
-cd "$(dirname "$0")"
+dirname="$(dirname "$0")"
+if [ "x$dirname" = "x." ]; then  # when this script is started from curl $DOTFILES_GIT_REPO | env bash
+	dirname=~/.config/dotfiles.git
+fi
+cd $dirname
 DOTFILES_ROOT=$(pwd)
 
 echo "DOTFILES_ROOT=$DOTFILES_ROOT"
