@@ -20,8 +20,10 @@ if [ -z "`which dirname`" ]; then
 	exit 1
 fi
 
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")"
 DOTFILES_ROOT=$(pwd)
+
+echo "DOTFILES_ROOT=$DOTFILES_ROOT"
 
 set -e
 
