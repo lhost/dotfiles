@@ -10,6 +10,16 @@
 # define URL to my dotfiles git repo
 DOTFILES_GIT_REPO="https://github.com/lhost/dotfiles.git"
 
+if [ -z "`which dirname`" ]; then
+	echo "Please install coreutils package"
+	if [ -f /etc/debian_version ]; then
+		sudo apt-get install coreutils
+	elif [ -f /etc/redhat-release ]; then
+		sudo yum install coreutils
+	fi
+	exit 1
+fi
+
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd)
 
