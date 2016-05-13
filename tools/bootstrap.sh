@@ -160,6 +160,11 @@ install_dotfiles ()
     dst="$HOME/.$(basename "${src%.*}")"
     link_file "$src" "$dst"
   done
+
+  # find the installers and run them iteratively
+  find . -name install.sh | while read installer ; do
+  	sh -c "${installer}" ;
+  done
 } # }}}
 
 # create basic directories
