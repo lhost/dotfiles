@@ -180,8 +180,8 @@ else
 	cd ~/.config/dotfiles.git/ && git pull
 fi
 
-setup_gitconfig
 install_dotfiles
+setup_gitconfig
 
 # If we're on a Mac, let's install and setup homebrew.
 if [ "$(uname -s)" == "Darwin" ]
