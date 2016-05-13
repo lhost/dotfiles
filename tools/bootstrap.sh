@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 #
 # bootstrap installs things.
+#
+# Install directly from network:
+#
+# curl https://raw.githubusercontent.com/lhost/dotfiles/master/tools/bootstrap.sh | env bash
+#
+
+# define URL to my dotfiles git repo
+DOTFILES_GIT_REPO="https://github.com/lhost/dotfiles.git"
 
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd)
@@ -27,9 +35,9 @@ fail () {
   exit
 }
 
-setup_gitconfig () {
-  if ! [ -f git/gitconfig.symlink ]
-  then
+setup_gitconfig ()
+{ # {{{
+  if ! [ -f ~/.local/.git/config ]; then
     info 'setup gitconfig'
 
     git_credential='cache'
@@ -43,14 +51,14 @@ setup_gitconfig () {
     user ' - What is your github author email?'
     read -e git_authoremail
 
-    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.symlink.example > git/gitconfig.symlink
+    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.symlink.example > ~/.local/.git/config
 
     success 'gitconfig'
   fi
-}
+} # }}}
 
-
-link_file () {
+link_file ()
+{ # {{{
   local src=$1 dst=$2
 
   local overwrite= backup= skip=
@@ -123,9 +131,10 @@ link_file () {
     ln -s "$1" "$2"
     success "linked $1 to $2"
   fi
-}
+} # }}}
 
-install_dotfiles () {
+install_dotfiles ()
+{ # {{{
   info 'installing dotfiles'
 
   local overwrite_all=false backup_all=false skip_all=false
@@ -135,7 +144,20 @@ install_dotfiles () {
     dst="$HOME/.$(basename "${src%.*}")"
     link_file "$src" "$dst"
   done
-}
+} # }}}
+
+# create basic directories
+for dir in ~/.config ~/.local/.git; do
+	if [ ! -d $dir ]; then
+		mkdir -p $dir
+	fi
+done
+
+if [ ! -d ~/.config/dotfiles.git/ ]; then
+	cd ~/.config && git clone $DOTFILES_GIT_REPO dotfiles.git && cd dotfiles.git
+else
+	cd ~/.config/dotfiles.git/ && git pull
+fi
 
 setup_gitconfig
 install_dotfiles
@@ -154,3 +176,6 @@ fi
 
 echo ''
 echo '  All installed!'
+
+# vim: fdm=marker
+

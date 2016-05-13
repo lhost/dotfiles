@@ -10,19 +10,20 @@
 You can clone the repository wherever you want. (I like to keep it in `~/.config/dotfiles.git`) The bootstrapper script will pull in the latest version and copy the files to your home folder.
 
 ```bash
-cd ~/.config && git clone https://github.com/lhost/dotfiles.git dotfiles.git && cd dotfiles.git && source bootstrap.sh
+curl https://raw.githubusercontent.com/lhost/dotfiles/master/tools/bootstrap.sh | env bash
 ```
 
 To update, `cd` into your local `dotfiles.git` repository and then:
 
 ```bash
-source bootstrap.sh
+cd ~/.config/dotfiles.git/
+source tools/bootstrap.sh
 ```
 
 Alternatively, to update while avoiding the confirmation prompt:
 
 ```bash
-set -- -f; source bootstrap.sh
+set -- -f; source tools/bootstrap.sh
 ```
 
 ### Add custom commands without creating a new fork
