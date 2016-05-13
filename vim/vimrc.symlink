@@ -19,6 +19,8 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'altercation/vim-colors-solarized'	" precision colorscheme for the vim text editor 
 											" http://ethanschoonover.com/solarized
 
+Plugin 'lepture/vim-jinja' " jinja syntax highligting - https://github.com/lepture/vim-jinja
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
