@@ -168,7 +168,7 @@ install_dotfiles ()
 } # }}}
 
 # create basic directories
-for dir in ~/.config ~/.local/.git; do
+for dir in ~/.config ~/.config/zsh ~/.local/.git ~/.local/zsh; do
 	if [ ! -d $dir ]; then
 		mkdir -p $dir
 	fi
