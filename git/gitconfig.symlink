@@ -1,3 +1,4 @@
+# vim: ft=gitconfig
 [alias]
 	# simple aliases
 	co = checkout
@@ -148,8 +149,8 @@
 [url "git://gist.github.com/"]
 
 	insteadOf = "gist:"
+[credential]
+	helper = store
 
 [include]
 	path = ~/.local/.git/config
-[credential]
-	helper = store
