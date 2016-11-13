@@ -1,0 +1,5 @@
+
+colorscheme solarized
+"set winminheight=3
+let g:open_all_win=1
+

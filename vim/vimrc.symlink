@@ -168,7 +168,7 @@ set sidescrolloff=1
 
 
 " Make window maximalized
-set winheight=100
+set winheight=999
 
 " The screen will not be redrawn while executing macros, registers
 " and other commands that have not been typed. To force an updates use |:redraw|.
@@ -200,12 +200,12 @@ set display+=uhex
 
 " Vim beeping go to the hell... {{{
 set noerrorbells
-set visualbell
+set novisualbell
 set t_vb=
 " }}}
 " Set this, if you will open all windows for files specified
 " on the commandline at vim startup.
-if !exists("g:open_all_win")
+if !exists("g:open_all_win") && ! has("gui_running")
 	let g:open_all_win=1
 endif
 
@@ -610,6 +610,8 @@ if exists("g:open_all_win")
 	" it prevents reopen windows after 2nd sourcing .vimrc
 	let g:open_all_win = 0
 endif
+
+" }}}
 
 " Modeline {{{
 " vim:set ts=4:
