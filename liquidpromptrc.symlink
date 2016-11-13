@@ -1,0 +1,37 @@
+# vim: ft=sh
+
+#echo Loading ~/.liquidpromptrc
+
+LP_ENABLE_VCS_ROOT=1 # if you want to show VCS informations with root account
+LP_ENABLE_GIT=1 # if you want to have Git information
+LP_ENABLE_SVN=0 # if you want to have Subversion information
+LP_ENABLE_HG=0 # if you want to have Mercurial information
+LP_ENABLE_BZR=0 # if you want to have Bazaar information
+LP_ENABLE_FOSSIL=0 # if you want to have Fossil information
+
+LP_ENABLE_PERM=1
+LP_PERM_CHAR=": "
+LP_ENABLE_PROXY=1
+LP_ENABLE_BATT=1
+
+#LP_ENABLE_SSH_COLORS=1
+LP_COLOR_HOST="$BOLD"
+LP_COLOR_SSH="$BOLD"
+
+# Current user
+LP_COLOR_USER_LOGGED=""           # user who logged in
+LP_COLOR_USER_ALT="$WHITE"         # user but not the one who logged in
+LP_COLOR_USER_ROOT="$WHITE" # root
+
+LP_COLOR_PATH="$BOLD$WHITE"
+LP_COLOR_PATH_ROOT="$BOLD$WHITE"
+
+# time display set
+LP_COLOR_TIME="$BOLD"
+LP_ENABLE_TIME=1
+# show only HH:MM, disable seconds
+if $_LP_SHELL_bash; then
+	_LP_TIME_SYMBOL="\A"
+else # zsh
+	_LP_TIME_SYMBOL="%T"
+fi
