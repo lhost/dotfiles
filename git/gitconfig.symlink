@@ -149,6 +149,12 @@
 [url "git://gist.github.com/"]
 
 	insteadOf = "gist:"
+[url "https://github.com"]
+
+	insteadOf = "git://github.com"
+[url "https://gitorious.org"]
+
+	insteadOf = "git://gitorious.org"
 [credential]
 	helper = store
 
