@@ -23,6 +23,15 @@ Plugin 'altercation/vim-colors-solarized'	" precision colorscheme for the vim te
 
 Plugin 'lepture/vim-jinja' " jinja syntax highligting - https://github.com/lepture/vim-jinja
 
+" Erlang: https://github.com/vim-erlang
+Plugin 'vim-erlang/vim-erlang-runtime'
+Plugin 'vim-erlang/vim-erlang-compiler'
+Plugin 'vim-erlang/vim-erlang-omnicomplete'
+Plugin 'vim-erlang/vim-erlang-tags'
+Plugin 'vim-erlang/vim-rebar'
+Plugin 'vim-erlang/vim-dialyzer'
+Plugin 'vim-erlang/vim-erlang-skeletons'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
