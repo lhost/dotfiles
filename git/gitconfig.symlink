@@ -83,7 +83,7 @@
 [color]
 	ui = true
 [core]
-	pager = less -x5 -r
+	pager = less -x4 -R
 [color "branch"]
 
 	current = yellow reverse
@@ -140,6 +140,10 @@
 
 	insteadOf = "github:"
 
+[url "https://gitorious.org/"]
+
+	insteadOf = "git://gitorious.org/"
+
 [url "git@gist.github.com:"]
 
 	insteadOf = "gst:"
@@ -160,3 +164,5 @@
 
 [include]
 	path = ~/.local/.git/config
+[branch]
+	autosetuprebase = always
