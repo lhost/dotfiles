@@ -162,8 +162,8 @@
 	insteadOf = "git://gitorious.org"
 [credential]
 	helper = store
+[branch]
+	autosetuprebase = always
 
 [include]
 	path = ~/.local/.git/config
-[branch]
-	autosetuprebase = always
