@@ -524,29 +524,29 @@ endfunction
 " Autocomands {{{
 if has("autocmd")
 
-" UGLY hack - preload templatefile.vim. This is needed for loading templates
-" for all buffers (when opening all windows for buffers)
-call Source("~/.vim/plugin/templatefile.vim")
-augroup TemplateSystem
-	autocmd!
-	au BufNewFile * call LoadTemplateFile()
-augroup END
+	" UGLY hack - preload templatefile.vim. This is needed for loading templates
+	" for all buffers (when opening all windows for buffers)
+	call Source("~/.vim/plugin/templatefile.vim")
+	augroup TemplateSystem
+		autocmd!
+		au BufNewFile * call LoadTemplateFile()
+	augroup END
 
 	" Autocomands for GUIEnter {{{
 	augroup GUIEnter
-	autocmd!
-	if has("gui_win32")
-		autocmd GUIEnter * simalt ~x
-	endif
+		autocmd!
+		if has("gui_win32")
+			autocmd GUIEnter * simalt ~x
+		endif
 	augroup END
 	" }}}
 
 	" Autocomands for ~/.vimrc {{{
 	augroup VimConfig
-	autocmd!
-	" Reread configuration of ViM if file ~/.vimrc is saved
-	autocmd BufWritePost ~/.vimrc	so ~/.vimrc | exec "normal zv"
-	autocmd BufWritePost vimrc   	so ~/.vimrc | exec "normal zv"
+		autocmd!
+		" Reread configuration of ViM if file ~/.vimrc is saved
+		autocmd BufWritePost ~/.vimrc	so ~/.vimrc | exec "normal zv"
+		autocmd BufWritePost vimrc   	so ~/.vimrc | exec "normal zv"
 	augroup END
 	" }}}
 
