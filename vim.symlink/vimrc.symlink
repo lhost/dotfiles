@@ -596,6 +596,55 @@ augroup END
 		autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 	augroup END
 
+	function! Perl()
+		" autoindent
+		setlocal autoindent
+		setlocal smartindent
+
+		" 4 space tabs
+		setlocal tabstop=4
+		setlocal shiftwidth=4
+		setlocal noexpandtab
+		setlocal softtabstop=4
+
+		" show matching brackets
+		setlocal showmatch
+
+		" show line numbers
+		"setlocal number
+
+		" check perl code with :make
+		setlocal makeprg=perl\ -c\ %\ $*
+		setlocal errorformat=%f:%l:%m
+		setlocal autowrite
+		"
+
+		" folding
+		"    setlocal foldmethod=syntax
+		"setlocal foldlevelstart=2
+		"setlocal foldmethod=marker
+		"setlocal foldmarker={,}
+
+		" Tidy selected lines (or entire file) with _t:
+		nnoremap <silent> <F3> m`:%!perltidy<cr>g``
+		vnoremap <silent> <F3> :!perltidy<cr>
+
+		" Deparse obfuscated code
+		nnoremap <silent> <F4> :.!perl -MO=Deparse 2>/dev/null<cr>
+		vnoremap <silent> <F4> :!perl -MO=Deparse 2>/dev/null<cr>
+
+	endfunction
+
+	"
+	" Call Perl() when you open a Perl file
+	augroup Perl
+		autocmd!
+
+		autocmd FileType perl call Perl()
+		autocmd BufNewFile,BufRead *.t call Perl()
+	augroup END
+
+
 endif " if has("autocmd")
 " }}} Autocomands
 
