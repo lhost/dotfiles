@@ -18,13 +18,21 @@ Plugin 'VundleVim/Vundle.vim'
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
 Plugin 'tpope/vim-fugitive'
+Plugin 'junkblocker/git-time-lapse'
 Plugin 'altercation/vim-colors-solarized'	" precision colorscheme for the vim text editor 
 											" http://ethanschoonover.com/solarized
 
 Plugin 'lepture/vim-jinja' " jinja syntax highligting - https://github.com/lepture/vim-jinja
 Plugin 'saltstack/salt-vim' " sls syntax highligting
+Plugin 'rhysd/clever-f.vim'
 Plugin 'ctrlpvim/ctrlp.vim' " Ctrl+p fuzzy path matching
 Plugin 'rickhowe/diffchar.vim' " exact differences between lines, character by character
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'DavsX/vim_test_runner', { 'for': 'perl' }
+Plugin 'Shougo/vimproc.vim', { 'do': 'make' }
+Plugin 'godlygeek/tabular'
+Plugin 'airblade/vim-rooter'
 
 " Erlang: https://github.com/vim-erlang
 Plugin 'vim-erlang/vim-erlang-runtime'
@@ -348,6 +356,74 @@ command! -nargs=0 DiacriticsOff			let b:disable_imap=1
 
 " Functions {{{
 
+" from https://github.com/DavsX/dotfiles/blob/master/vim/vimrc
+" Function NewPerlModule {{{
+function! NewPerlModule()
+    0r ~/.vim/skeleton/perl.package
+    let l:path = expand('%:p')
+    let l:path = substitute(l:path, '^.*/\(lib\|t\)/', '', '')
+    let l:path = substitute(l:path, '.pm$', '', '')
+    let l:module_name = substitute(l:path, '/', '::', 'g')
+    execute "normal! ggwi".l:module_name
+endfunction
+" }}}
+
+" CommitPerlFiles {{{
+function! CommitPerlFiles()
+    let l:path = expand("%")
+    let l:git_rev = system("git rev-parse --abbrev-ref HEAD 2>/dev/null")
+    let l:task_number = matchstr(l:git_rev, '\v(BAC-\d+)')
+    let l:msg_prefix = ''
+
+    if l:task_number != ''
+        let l:msg_prefix = l:task_number." "
+    endif
+
+    if l:path =~# '\v^(bin|lib|t)\/.+(pl|pm|t)?$'
+        let l:path = substitute(l:path, '\v(bin|lib|t)/', '', '')
+        let l:path = substitute(l:path, '\/', '::', 'g')
+
+        let l:msg_prefix = l:msg_prefix.l:path
+        execute "normal! :Gwrite \<BAR> Gcommit\<CR>O".l:msg_prefix." - "
+    else
+        execute "normal! :let @f=expand('%:t:r')\<CR>:Gwrite \<BAR> Gcommit\<CR>O\<C-R>f - \<space>"
+    endif
+
+endfunction
+" }}}
+
+" PerlDumpVariables {{{
+function! PerlDumpVariables() range
+    let l:variable_filter = {}
+    let l:variable_order = []
+
+    for line_number in range(a:firstline, a:lastline)
+        let l:line = getline(line_number)
+        if l:line =~# '\v^\s*#'
+            continue
+        endif
+
+        let l:variable_name = matchstr(l:line, '\v^\s*(my )?\$\zs([^ =]+)')
+        if l:variable_name !=? ''
+            if !has_key(l:variable_filter, l:variable_name)
+                let l:variable_filter[l:variable_name] = 1
+                let l:variable_order += [l:variable_name]
+            endif
+        endif
+    endfor
+
+    execute "normal! ".a:lastline."G"
+
+    execute "normal! o\<ESC>ouse Data::Dumper; local $Data::Dumper::Sortkeys = 1; local $Data::Dumper::Maxdepth = 2;"
+    for variable in l:variable_order
+        execute "normal! oprint '".variable.": '.Dumper($".variable.");"
+    endfor
+    execute "normal! o"
+endfunction
+" }}}
+
+" }}}
+
 " Function FoldLongLines() {{{
 "
 if version >= 600
@@ -632,7 +708,9 @@ if has("autocmd")
 
 		" Tidy selected lines (or entire file) with _t:
 		nnoremap <silent> <F3> m`:%!perltidy<cr>g``
+		nnoremap <leader>pt m`:%!perltidy<cr>g``
 		vnoremap <silent> <F3> :!perltidy<cr>
+		vnoremap <leader>pt :!perltidy<cr>
 
 		" Deparse obfuscated code
 		nnoremap <silent> <F4> :.!perl -MO=Deparse 2>/dev/null<cr>
@@ -647,6 +725,63 @@ if has("autocmd")
 
 		autocmd FileType perl call Perl()
 		autocmd BufNewFile,BufRead *.t call Perl()
+
+		" from https://github.com/DavsX/dotfiles/blob/master/vim/vimrc#L464
+		" {{{
+		autocmd BufRead,BufNewFile *.pm  setfiletype perl
+		autocmd BufRead,BufNewFile *.pl  setfiletype perl
+		autocmd BufRead,BufNewFile *.t   setfiletype perl
+
+		autocmd BufNewFile *.pl 0r ~/.vim/skeleton/perl.script
+		autocmd BufNewFile *.t 0r ~/.vim/skeleton/perl.test
+
+		autocmd BufRead,BufNewFile *.pm if line('$') == 1 && getline('.') == '' | call NewPerlModule() | endif
+
+		"autocmd BufWritePost * if &filetype=='perl' | call Check_time_since_last_commit() | endif
+
+		autocmd BufRead,BufWritePre,FileType perl silent execute ":Rooter"
+
+		autocmd BufRead,BufNewFile *.pm  setlocal filetype=perl
+		autocmd BufRead,BufNewFile *.pl  setlocal filetype=perl
+		autocmd BufRead,BufNewFile *.t   setlocal filetype=perl
+
+		autocmd FileType perl setlocal iskeyword-=:
+
+		autocmd FileType perl setlocal nowrap
+
+		autocmd FileType perl syn region perlSubFold start="^\z(\s*\)\<subtest\>.*[^};]$" end="^\z1};\s*$" transparent fold keepend
+		autocmd FileType perl syn region perlSubFold start="^\z(\s*\)\<txn_subtest\>.*[^};]$" end="^\z1};\s*$" transparent fold keepend
+		autocmd FileType perl hi Statement ctermfg=14
+
+		autocmd FileType perl nnoremap <buffer> <leader>dd <ESC>ause v5.10;<CR>use Data::Dumper;<CR>local $Data::Dumper::Sortkeys = 1;<CR>local $Data::Dumper::Maxdepth = 2;<CR>say STDERR Dumper();<LEFT><LEFT>
+		autocmd FileType perl nnoremap <buffer> <leader>dt <ESC>ause v5.10;<CR>use Data::Dumper;<CR>local $Data::Dumper::Terse = 1;<CR>local $Data::Dumper::Indent = 0;<CR>local $Data::Dumper::Sortkeys = 1;<CR>local $Data::Dumper::Maxdepth = 2;<CR>say STDERR Dumper();<LEFT><LEFT>
+		autocmd FileType perl nnoremap <buffer> <leader>so <ESC>vapk:sort<CR>
+
+		autocmd FileType perl nnoremap <buffer> <leader>gu :let @/=expand("<cword>")<CR>:!grep -rP '(::<BAR>\->)<c-r>=expand("<cword>")<CR>' bin/ lib/ etc/<CR>
+		autocmd FileType perl nnoremap <buffer> <leader>gd :let @/=expand("<cword>")<CR>:!grep -rP 'sub <c-r>=expand("<cword>")<CR>' bin/ lib/ etc/<CR>
+		autocmd FileType perl nnoremap <buffer> <leader>ga :let @/=expand("<cword>")<CR>:!grep -rP '<c-r>=expand("<cword>")<CR>' bin/ lib/ etc/ t/<CR>
+
+		autocmd FileType perl nnoremap <buffer> <leader>rr :!perl -Ilib %<CR>
+
+		vnoremap <leader>pt :!perltidy<CR>
+		nnoremap <leader>pt :%!perltidy<CR>
+
+		autocmd FileType perl nnoremap <buffer> <leader>ts  :!perl -Ilib -c %<CR>
+		autocmd FileType perl nnoremap <buffer> <leader>tf  :PerlTestFile<CR>
+		autocmd FileType perl nnoremap <buffer> <leader>tpf :PerlProveTestFile<CR>
+		autocmd FileType perl nnoremap <buffer> <leader>ta  :PerlTestAll<CR>
+		autocmd FileType perl nnoremap <buffer> <leader>td  :PerlTestDir<CR>
+		autocmd FileType perl nnoremap <buffer> <leader>tc  :PerlTestCreate<CR>
+		autocmd FileType perl nnoremap <buffer> <leader>to  :PerlTestDirOpen<CR>
+
+		autocmd FileType perl nnoremap gci :call CommitPerlFiles()<CR>
+
+		" autocmd FileType perl nnoremap <buffer> <leader>ps viw"hyouse v5.10; say "<C-r>h: $<C-r>h";<ESC>
+		" autocmd FileType perl nnoremap <buffer> <leader>pd viw"hyouse v5.10; use Data::Dumper; say "<C-r>h: ".Dumper($<C-r>h);<ESC>
+		autocmd FileType perl nnoremap <buffer> <leader>ps 0f$lviw"hyouse v5.10; say "<C-r>h: $<C-r>h";<ESC>
+		autocmd FileType perl nnoremap <buffer> <leader>pd 0f$lviw"hyouse v5.10; use Data::Dumper; local $Data::Dumper::Sortkeys = 1; local $Data::Dumper::Maxdepth = 2;<CR>say "<C-r>h: ".Dumper($<C-r>h);<ESC>
+		autocmd FileType perl vnoremap <buffer> <leader>pd :call PerlDumpVariables()<CR>
+		" }}}
 	augroup END
 
 
@@ -676,6 +811,87 @@ hi Comment      term=bold                            ctermfg=DarkCyan
 "" Parenthesis checking
 hi MatchParen   term=bold         cterm=bold,reverse ctermfg=DarkBlue  ctermbg=Black
 
+" }}}
+
+
+" Plugin settings {{{
+" Tabularize {{{
+vnoremap <leader>ah :Tabularize /^.\{-}\zs=>/l1l1<CR>
+vnoremap <leader>a= :Tabularize /^.\{-}\zs=\(>\)\@!/l1l1<CR>
+vnoremap <leader>a, :Tabularize /^.\{-}\zs,/l1l1<CR>
+vnoremap <leader>aa :Tabularize /
+vnoremap <leader>af :Tabularize /^.\{-}\zs/l1l1<left><left><left><left><left>
+
+nnoremap <leader>ah :Tabularize /^.\{-}\zs=>/l1l1<CR>
+nnoremap <leader>a= :Tabularize /^.\{-}\zs=\(>\)\@!/l1l1<CR>
+nnoremap <leader>a, :Tabularize /^.\{-}\zs,/l1l1<CR>
+nnoremap <leader>aa :Tabularize /
+nnoremap <leader>af :Tabularize /^.\{-}\zs/l1l1<left><left><left><left><left>
+" }}}
+" ctrlp {{{
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+let g:ctrlp_switch_buffer = 'Et'
+let g:ctrlp_regexp = 0
+let g:ctrlp_by_filename = 0
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_custom_ignore = {
+            \ 'dir': '\v(\.git|venv|deps|_build)',
+            \ 'file': '\v(__init2__\.py|\.pyc)$',
+            \ }
+
+nnoremap <leader>, :CtrlP<CR>
+" }}}
+" Clever-f {{{
+let g:clever_f_across_no_line = 0
+" }}}
+" Rooter {{{
+let g:rooter_patterns = [ '.vimproject', '.git/' ]
+let g:rooter_manual_only = 0
+let g:rooter_change_directory_for_non_project_files = 0
+" }}}
+" snippets {{{
+let g:snips_author = "David Kovacs [DavsX]"
+let g:snips_email = "kovdavid@gmail.com"
+let g:snips_github = "http://github.com/DavsX"
+" }}}
+" test_class_runner {{{
+let $TAP_ELAPSED_FORMAT  = '%t1 elapsed'
+let g:perl_test_args_perl   = '-It/lib -Ilib'
+let g:perl_test_args_prove  = '-It/lib -Ilib -r -j9 --timer'
+let g:perl_test_all_command = 'prove'
+" }}}
+" NERDTree {{{
+function! NERDTreeFindToggle()
+    if &filetype=='nerdtree'
+        execute 'NERDTreeClose'
+    else
+        if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+            execute 'NERDTreeClose'
+        else
+            execute 'NERDTreeFind'
+        endif
+    endif
+endfunction
+nnoremap <F5> :call NERDTreeFindToggle()<CR>
+
+let NERDTreeIgnore = ['\.pyc$']
+let NERDTreeChDirMode=0
+" }}}
+" Fugitive {{{
+nnoremap gst :Gstatus<CR>5j
+nnoremap gd :Gvdiff<CR>
+nnoremap gci :let @f=expand("%:t:r")<CR>:Gwrite <BAR> Gcommit<CR>O<C-R>f:<space>
+nnoremap gca :Gwrite <BAR> Gcommit --amend<CR>ggA
+" }}}
+" NERDCommenter {{{
+let g:NERDCustomDelimiters = {
+            \ 'elixir': { 'left': '#' },
+            \ 'haskell': { 'left': '--' },
+            \ 'arduino': { 'left': '//' }
+            \}
+let g:NERDRemoveExtraSpaces = 1
+let g:NERDSpaceDelims = 1
+" }}}
 " }}}
 
 call Source(VIMRC_EXTRA.".post")
