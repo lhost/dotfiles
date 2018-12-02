@@ -24,6 +24,7 @@ Plugin 'altercation/vim-colors-solarized'	" precision colorscheme for the vim te
 Plugin 'lepture/vim-jinja' " jinja syntax highligting - https://github.com/lepture/vim-jinja
 Plugin 'saltstack/salt-vim' " sls syntax highligting
 Plugin 'ctrlpvim/ctrlp.vim' " Ctrl+p fuzzy path matching
+Plugin 'rickhowe/diffchar.vim' " exact differences between lines, character by character
 
 " Erlang: https://github.com/vim-erlang
 Plugin 'vim-erlang/vim-erlang-runtime'
