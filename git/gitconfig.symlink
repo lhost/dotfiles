@@ -4,23 +4,23 @@
 	co = checkout
 	br = branch
 	ci = commit
-	st = status
+	st = stash
 	unstage = reset HEAD --
 	last = log -1 HEAD
 	visual = !gitg
 
 	# View abbreviated SHA, description, and history graph of the latest 20 commits
 	#l = log --pretty=oneline -n 20 --graph --abbrev-commit
-	l = log --pretty=oneline --graph --abbrev-commit
+	l = log --color --graph --decorate
 
 	# View the current working tree status using the short format
-	s = status -s
+	s = status
 
 	# Show the diff between the latest commit and the current state
 	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
 
 	# `git di $number` shows the diff between the state `$number` revisions ago and the current state
-	di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+	di = diff
 
 	# Pull in remote changes for the current repository and all its submodules
 	p = !"git pull; git submodule foreach git pull origin master"
@@ -85,6 +85,18 @@
 			git commit --amend -m \"$(git log -1 --pretty=%B)\n\nCloses #$1.\"; \
 		fi \
 	}; f"
+	a = add
+	sh = show
+	g = grep
+	dw = diff --word-diff=color
+	dc = diff --word-diff=color --word-diff-regex=.
+	dii = diff --cached
+	diw = diff --cached --word-diff=color
+	dic = diff --cached --word-diff=color --word-diff-regex=.
+	k = log --color --graph --decorate --pretty=oneline --abbrev-commit
+	lgshort = log --color --graph --decorate --pretty=tformat:'%h\t%aN\t%C(bold)%s%C(yellow)%d'
+	lgwdiff = log --color --graph --decorate -p --word-diff=color -w
+	puf = push --force-with-lease
 [color]
 	ui = true
 [core]
@@ -126,7 +138,8 @@
 	# Include summaries of merged commits in newly created merge commit messages
 	log = true
 	#conflictstyle = diff3
-	tool = kdiff3
+	#tool = kdiff3
+	tool = gvim
 
 [diff]
 	# --diff-algorithm={patience|minimal|histogram|myers}
