@@ -178,13 +178,17 @@ set mousemodel=popup
 if ! has("gui_running")
 	"set scrolloff=999
 	set scrolloff=10
+else
+	set scrolloff=0
 endif
 set sidescroll=5
 set sidescrolloff=1
 
 
-" Make window maximalized
-set winheight=999
+" Make window maximalized - not for diffmode
+if v:progname !~ "diff"
+	set winheight=999
+endif
 
 " The screen will not be redrawn while executing macros, registers
 " and other commands that have not been typed. To force an updates use |:redraw|.
