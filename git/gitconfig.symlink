@@ -177,3 +177,8 @@
 
 [include]
 	path = ~/.local/.git/config
+[cola]
+	spellcheck = false
+	tabwidth = 4
+[gui]
+	historybrowser = gitg
