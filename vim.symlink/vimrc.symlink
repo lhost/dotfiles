@@ -845,14 +845,9 @@ nnoremap <leader>, :CtrlP<CR>
 let g:clever_f_across_no_line = 0
 " }}}
 " Rooter {{{
-let g:rooter_patterns = [ '.vimproject', '.git/' ]
+let g:rooter_patterns = [ 'Makefile', '.vimproject', '.git/' ]
 let g:rooter_manual_only = 0
 let g:rooter_change_directory_for_non_project_files = 0
-" }}}
-" snippets {{{
-let g:snips_author = "David Kovacs [DavsX]"
-let g:snips_email = "kovdavid@gmail.com"
-let g:snips_github = "http://github.com/DavsX"
 " }}}
 " test_class_runner {{{
 let $TAP_ELAPSED_FORMAT  = '%t1 elapsed'
