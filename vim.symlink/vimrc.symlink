@@ -26,13 +26,11 @@ Plugin 'lepture/vim-jinja' " jinja syntax highligting - https://github.com/leptu
 Plugin 'saltstack/salt-vim' " sls syntax highligting
 Plugin 'rhysd/clever-f.vim'
 Plugin 'ctrlpvim/ctrlp.vim' " Ctrl+p fuzzy path matching
-Plugin 'rickhowe/diffchar.vim' " exact differences between lines, character by character
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'DavsX/vim_test_runner', { 'for': 'perl' }
 Plugin 'Shougo/vimproc.vim', { 'do': 'make' }
 Plugin 'godlygeek/tabular'
-Plugin 'airblade/vim-rooter'
 
 " Erlang: https://github.com/vim-erlang
 Plugin 'vim-erlang/vim-erlang-runtime'
@@ -739,8 +737,6 @@ if has("autocmd")
 
 		"autocmd BufWritePost * if &filetype=='perl' | call Check_time_since_last_commit() | endif
 
-		autocmd BufRead,BufWritePre,FileType perl silent execute ":Rooter"
-
 		autocmd BufRead,BufNewFile *.pm  setlocal filetype=perl
 		autocmd BufRead,BufNewFile *.pl  setlocal filetype=perl
 		autocmd BufRead,BufNewFile *.t   setlocal filetype=perl
@@ -843,11 +839,6 @@ nnoremap <leader>, :CtrlP<CR>
 " }}}
 " Clever-f {{{
 let g:clever_f_across_no_line = 0
-" }}}
-" Rooter {{{
-let g:rooter_patterns = [ 'Makefile', '.vimproject', '.git/' ]
-let g:rooter_manual_only = 0
-let g:rooter_change_directory_for_non_project_files = 0
 " }}}
 " test_class_runner {{{
 let $TAP_ELAPSED_FORMAT  = '%t1 elapsed'
