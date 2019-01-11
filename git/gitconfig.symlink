@@ -193,5 +193,7 @@
 [cola]
 	spellcheck = false
 	tabwidth = 4
+	safemode = false
+	maxrecent = 99
 [gui]
 	historybrowser = gitg
