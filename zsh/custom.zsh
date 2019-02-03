@@ -23,7 +23,7 @@ precmd () { print -Pn "\e]0;%n@%m: %~\a" }
 # Some environment variables
 export USER=`id -un`
 export LOGNAME=$USER
-export PATH=$HOME/bin:/sbin:/usr/sbin:$PATH
+export PATH=$HOME/.local/bin/:$HOME/bin:/sbin:/usr/sbin:$PATH
 #export MAIL=/var/spool/mail/`id -u -n`
 unset MAIL
 export MAILDIR=$HOME/Maildir
