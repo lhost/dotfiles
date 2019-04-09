@@ -241,6 +241,9 @@ if !exists("g:fold_long_lines")
 	let g:fold_long_lines=300
 endif
 
+" ignore searching in included files
+set complete-=i
+
 " }}}
 
 " Keybord mappings {{{
@@ -686,6 +689,9 @@ if has("autocmd")
 		setlocal shiftwidth=4
 		setlocal noexpandtab
 		setlocal softtabstop=4
+
+		" ignore searching in included files
+		setlocal complete-=i
 
 		" show matching brackets
 		setlocal showmatch
