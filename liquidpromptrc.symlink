@@ -30,7 +30,7 @@ LP_COLOR_PATH_ROOT="$BOLD$WHITE"
 LP_COLOR_TIME="$BOLD"
 LP_ENABLE_TIME=1
 # show only HH:MM, disable seconds
-if $_LP_SHELL_bash; then
+if (( _LP_SHELL_bash )); then
 	_LP_TIME_SYMBOL="\A"
 else # zsh
 	_LP_TIME_SYMBOL="%T"
