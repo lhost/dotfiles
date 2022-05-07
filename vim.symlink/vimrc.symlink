@@ -194,7 +194,7 @@ set sidescrolloff=1
 
 " Make window maximalized - not for diffmode
 if v:progname !~ "diff"
-	set winheight=999
+	set winheight=50
 endif
 
 " The screen will not be redrawn while executing macros, registers

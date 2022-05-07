@@ -19,9 +19,9 @@ nnoremap ZZ <Nop>
 
 " http://vim.wikia.com/wiki/Maximize_or_set_initial_window_size
 if v:progname =~ "diff"
-	set lines=999
+"	set lines=999
 	set columns=999
 else
-	set lines=999
+"	set lines=999
 	set columns=100
 endif
