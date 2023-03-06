@@ -197,3 +197,5 @@
 	maxrecent = 99
 [gui]
 	historybrowser = gitg
+[pull]
+	rebase = true
