@@ -143,7 +143,8 @@
 
 [diff]
 	# --diff-algorithm={patience|minimal|histogram|myers}
-	algorithm = patience
+	algorithm = histogram
+	wordRegex = [^[:space:],/=-]+
 
 [push]
 
