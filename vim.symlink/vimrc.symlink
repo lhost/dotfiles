@@ -147,6 +147,7 @@ set nostartofline
 " TODO: there is no way how to test vim patchlevel version, therefore we are
 "       not able determine vim version < 6.1.265
 set modeline
+set modelineexpr
 
 " Available TAGS files
 set tags=./TAGS,./tags,tags
