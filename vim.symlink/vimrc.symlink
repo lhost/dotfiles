@@ -41,6 +41,7 @@ Plugin 'vim-erlang/vim-erlang-tags'
 Plugin 'vim-erlang/vim-rebar'
 Plugin 'vim-erlang/vim-dialyzer'
 Plugin 'vim-erlang/vim-erlang-skeletons'
+Plugin 'felipec/sharness'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
