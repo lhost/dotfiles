@@ -17,7 +17,7 @@ if [ -z "`which dirname`" ]; then
 	elif [ -f /etc/redhat-release ]; then
 		sudo yum install coreutils
 	fi
-	exit 1
+	#exit 1
 fi
 
 dirname="$(dirname "$0")"
@@ -48,7 +48,7 @@ success () {
 fail () {
   printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
   echo ''
-  exit
+  #return 1
 }
 
 setup_gitconfig ()
@@ -57,8 +57,7 @@ setup_gitconfig ()
     info 'setup gitconfig'
 
     git_credential='cache'
-    if [ "$(uname -s)" == "Darwin" ]
-    then
+    if [ "$(uname -s)" == "Darwin" ]; then
       git_credential='osxkeychain'
     fi
 
@@ -80,16 +79,13 @@ link_file ()
   local overwrite= backup= skip=
   local action=
 
-  if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]
-  then
+  if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]; then
 
-    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
-    then
+    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]; then
 
       local currentSrc="$(readlink $dst)"
 
-      if [ "$currentSrc" == "$src" ]
-      then
+      if [ "$currentSrc" == "$src" ]; then
 
         skip=true;
 
@@ -124,26 +120,22 @@ link_file ()
     backup=${backup:-$backup_all}
     skip=${skip:-$skip_all}
 
-    if [ "$overwrite" == "true" ]
-    then
+    if [ "$overwrite" == "true" ]; then
       rm -rf "$dst"
       success "removed $dst"
     fi
 
-    if [ "$backup" == "true" ]
-    then
+    if [ "$backup" == "true" ]; then
       mv "$dst" "${dst}.backup"
       success "moved $dst to ${dst}.backup"
     fi
 
-    if [ "$skip" == "true" ]
-    then
+    if [ "$skip" == "true" ]; then
       success "skipped $src"
     fi
   fi
 
-  if [ "$skip" != "true" ]  # "false" or empty
-  then
+  if [ "$skip" != "true" ]; then  # "false" or empty
     ln -s "$1" "$2"
     success "linked $1 to $2"
   fi
@@ -181,18 +173,16 @@ done
 if [ ! -d ~/.config/dotfiles.git/ ]; then
 	cd ~/.config && git clone $DOTFILES_GIT_REPO dotfiles.git && cd dotfiles.git
 else
-	cd ~/.config/dotfiles.git/ && git pull
+	echo "cd ~/.config/dotfiles.git/ && git pull"
 fi
 
 install_dotfiles
 setup_gitconfig
 
 # If we're on a Mac, let's install and setup homebrew.
-if [ "$(uname -s)" == "Darwin" ]
-then
+if [ "$(uname -s)" == "Darwin" ]; then
   info "installing dependencies"
-  if source bin/dot > /tmp/dotfiles-dot 2>&1
-  then
+  if source bin/dot > /tmp/dotfiles-dot 2>&1 ; then
     success "dependencies installed"
   else
     fail "error installing dependencies"

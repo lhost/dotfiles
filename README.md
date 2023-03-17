@@ -17,13 +17,13 @@ To update, `cd` into your local `dotfiles.git` repository and then:
 
 ```bash
 cd ~/.config/dotfiles.git/
-source bootstrap.sh
+bash bootstrap.sh
 ```
 
 Alternatively, to update while avoiding the confirmation prompt:
 
 ```bash
-set -- -f; source bootstrap.sh
+set -- -f; bash bootstrap.sh
 ```
 
 ### Add custom commands without creating a new fork
