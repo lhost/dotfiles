@@ -29,13 +29,10 @@ unset MAIL
 export MAILDIR=$HOME/Maildir
 export HOSTNAME=`/bin/hostname`
 export EDITOR=vim
-export CVSEDITOR=vim
 export BROWSER=firefox
 export PAGER=less
 export LESS='-M'
 export ZBEEP=''
-#export CVS_RSH="$HOME/bin/cvs_ssh"
-#export SVNROOT="file://$HOME/svn_root/"
 export LYNX_TEMP_SPACE=/tmp/
 #export LESSCHARSET=iso8859
 
