@@ -1,0 +1,4 @@
+
+export PATH=/snap/bin:$HOME/.local/bin/:$HOME/bin:/usr/sbin:$PATH
+PATH="$HOME/perl5/bin${PATH:+:${PATH}}"; export PATH;
+
