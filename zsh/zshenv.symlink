@@ -1,4 +1,6 @@
 
-export PATH=/snap/bin:$HOME/.local/bin/:$HOME/bin:/usr/sbin:$PATH
-PATH="$HOME/perl5/bin${PATH:+:${PATH}}"; export PATH;
+export NVM_DIR="$HOME/node_modules"
+
+export PATH=/snap/bin:$HOME/.local/bin/:$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/usr/games
+PATH="$HOME/perl5/bin:$NVM_DIR/bin${PATH:+:${PATH}}"; export PATH;
 
