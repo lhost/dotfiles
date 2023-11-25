@@ -32,6 +32,7 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'DavsX/vim_test_runner', { 'for': 'perl' }
 Plugin 'Shougo/vimproc.vim', { 'do': 'make' }
 Plugin 'godlygeek/tabular'
+Plugin 'prettier/vim-prettier'
 
 " Erlang: https://github.com/vim-erlang
 Plugin 'vim-erlang/vim-erlang-runtime'
@@ -787,6 +788,62 @@ if has("autocmd")
 		autocmd FileType perl nnoremap <buffer> <leader>pd 0f$lviw"hyouse v5.10; use Data::Dumper; local $Data::Dumper::Sortkeys = 1; local $Data::Dumper::Maxdepth = 2;<CR>say "<C-r>h: ".Dumper($<C-r>h);<ESC>
 		autocmd FileType perl vnoremap <buffer> <leader>pd :call PerlDumpVariables()<CR>
 		" }}}
+	augroup END
+
+	" https://peterbabic.dev/blog/vim-filter-contents-replaced-wtih-error/
+	function PrettierPhpCursor()
+		let save_pos = getpos(".")
+		%! prettier --parser=php
+		" undo automatically on error
+		if v:shell_error | silent undo | endif
+		call setpos('.', save_pos)
+	endfunction
+	function! PHP()
+		" autoindent
+		setlocal autoindent
+		setlocal smartindent
+
+		" 4 space tabs
+		setlocal tabstop=4
+		setlocal shiftwidth=4
+		setlocal expandtab
+		setlocal softtabstop=4
+
+		" ignore searching in included files
+		setlocal complete-=i
+
+		" show matching brackets
+		setlocal showmatch
+
+		" show line numbers
+		"setlocal number
+
+		" check perl code with :make
+		setlocal makeprg=php\ -l\ %\ $*
+		setlocal errorformat=%f:%l:%m
+		setlocal autowrite
+		"
+
+		" folding
+		"    setlocal foldmethod=syntax
+		"setlocal foldlevelstart=2
+		"setlocal foldmethod=marker
+		"setlocal foldmarker={,}
+
+		" Tidy selected lines (or entire file) with _t:
+		nnoremap <silent> <F3> m`:call PrettierPhpCursor()<cr>g``
+		nnoremap <leader>pt m`:call PrettierPhpCursor()<cr>g``
+		vnoremap <silent> <F3> :call PrettierPhpCursor()<cr>
+		vnoremap <leader>pt :call PrettierPhpCursor()<cr>
+
+		command PrettierPhp call PrettierPhpCursor()
+
+	endfunction
+
+	augroup PHP
+		autocmd!
+
+		autocmd FileType php call PHP()
 	augroup END
 
 
