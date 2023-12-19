@@ -27,7 +27,7 @@ alias S='less -S -R'
 alias x='startx &'
 # share files on the web:
 alias www='setfacl -s user::rw-,group::---,other::r--,u:www-data:r--'
-alias grep='grep --color=always --exclude="*.map" --exclude="*.min.js" --exclude-dir=.git --exclude-dir=vendor --exclude-dir=node_modules'
+alias grep='grep --color=always --exclude="*.map" --exclude="*.min.css" --exclude="*.min.js" --exclude-dir=.git --exclude-dir=vendor --exclude-dir=node_modules'
 
 unalias	pstree &> /dev/null
 alias	pstree='pstree -pGh'
