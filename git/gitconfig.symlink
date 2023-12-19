@@ -11,7 +11,8 @@
 
 	# View abbreviated SHA, description, and history graph of the latest 20 commits
 	#l = log --pretty=oneline -n 20 --graph --abbrev-commit
-	l = log --color --graph --decorate
+	#l = log --color --graph --decorate
+	l = log --date='format:%Y-%m-%d %H:%M' --pretty='format:%C(auto,yellow)%h %C(auto,magenta)%G? %C(auto,blue)%<(16,trunc)%ad%C(auto,reset) %C(auto,green)%aN%C(auto) %ae%x09%C(auto)%d %gD %C(auto,reset)%s' --decorate --graph
 
 	# View the current working tree status using the short format
 	s = status
@@ -97,11 +98,15 @@
 	lgshort = log --color --graph --decorate --pretty=tformat:'%h\t%aN\t%C(bold)%s%C(yellow)%d'
 	lgwdiff = log --color --graph --decorate -p --word-diff=color -w
 	puf = push --force-with-lease
+[format]
+	#pretty = %C(auto,yellow)%h %C(auto,magenta)%G? %C(auto,blue)%<(16,trunc)%ad%C(auto,reset) %C(auto,green)%aN%C(auto) %ae%x09%C(auto)%d %gD %C(auto,reset)%s
 [color]
 	ui = true
 [core]
 	pager = less -F -X -R
 	whitespace = space-before-tab,indent-with-non-tab,tabwidth=4
+	quotePath = false
+	commitGraph = true
 [color "branch"]
 
 	current = yellow reverse
@@ -201,3 +206,7 @@
 	historybrowser = gitg
 [pull]
 	rebase = true
+[receive]
+	advertisePushOptions = true
+[gc]
+	writeCommitGraph = true
