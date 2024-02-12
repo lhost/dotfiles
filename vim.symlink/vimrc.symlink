@@ -852,12 +852,9 @@ endif " if has("autocmd")
 
 " Colors {{{
 
+set background=dark
 if has('gui_running')
-	"set background=light
-	set background=dark
 	colorscheme solarized
-else
-	set background=dark
 endif
 
 hi StatusLine   term=bold,reverse cterm=bold,reverse
