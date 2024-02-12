@@ -11,7 +11,6 @@ alias -- -="cd -"
 # Shortcuts
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
-alias db="cd ~/Dropbox"
 alias g="git"
 alias h="history"
 alias j="jobs"
@@ -46,6 +45,32 @@ alias cd='pushd'
 alias cx='pushd -0 > /dev/null'
 alias ks='killall -STOP xlock'
 alias kc='killall -CONT xlock'
+
+#
+# PHP stuff
+#
+alias serve='php artisan serve'
+alias art='php artisan'
+alias mig='php artisan migrate'
+alias seed='php artisan db:seed'
+alias tinker='php artisan tinker'
+
+alias a='php artisan'
+alias c='composer'
+
+#
+# Define aliases 'g:m' and 'g.m' (dot saves one Shift press):
+#
+for sep in ':' '.'; do
+	alias g${sep}m='php artisan generate:model'
+	alias g${sep}c='php artisan generate:controller'
+	alias g${sep}v='php artisan generate:view'
+	alias g${sep}s='php artisan generate:seed'
+	alias g${sep}mig='php artisan generate:migration'
+	alias g${sep}r='php artisan generate:resource'
+
+	alias c${sep}i='composer install'
+done
 
 #unalias run-help
 autoload run-help
