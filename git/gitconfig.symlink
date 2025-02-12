@@ -144,7 +144,9 @@
 	log = true
 	#conflictstyle = diff3
 	#tool = kdiff3
-	tool = gvim
+	tool = vimdiff
+	conflictstyle = diff3
+	guitool = gvimdiff
 
 [diff]
 	# --diff-algorithm={patience|minimal|histogram|myers}
