@@ -2,7 +2,6 @@
 # vim:set ts=4:
 # vim600:fdm=marker fdl=0 fdc=3 ft=zsh:
 
-mesg y
 bindkey -e
 
 # Set prompts
