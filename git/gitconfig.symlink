@@ -107,6 +107,7 @@
 	whitespace = space-before-tab,indent-with-non-tab,tabwidth=4
 	quotePath = false
 	commitGraph = true
+	excludesfile = ~/.gitignore
 [color "branch"]
 
 	current = yellow reverse
@@ -130,7 +131,7 @@
 	noprefix = true
 	mnemonicprefix = true
 	# Detect copies as well as renames
-	renames = copies
+	renames = true
 [http]
 #	proxy = http://proxy:3128
 [help]
@@ -145,13 +146,14 @@
 	#conflictstyle = diff3
 	#tool = kdiff3
 	tool = vimdiff
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 	guitool = gvimdiff
 
 [diff]
 	# --diff-algorithm={patience|minimal|histogram|myers}
 	algorithm = histogram
 	wordRegex = [^[:space:],/=-]+
+	colorMoved = plain
 
 [push]
 
@@ -160,6 +162,7 @@
 	# `git config --global push.default simple`. See http://git.io/mMah-w.
 	default = current
 	autoSetupRemote = true
+	followTags = true
 
 # URL shorthands
 
@@ -196,6 +199,7 @@
 	helper = store
 [branch]
 	autosetuprebase = always
+	sort = -committerdate
 
 [include]
 	path = ~/.local/.git/config
@@ -212,3 +216,20 @@
 	advertisePushOptions = true
 [gc]
 	writeCommitGraph = true
+[column]
+#	ui = auto
+[tag]
+	sort = version:refname
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[commit]
+	verbose = true
+[rerere]
+	enabled = true
+	autoupdate = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
