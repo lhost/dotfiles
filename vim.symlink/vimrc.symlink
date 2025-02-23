@@ -230,8 +230,9 @@ set display+=uhex
 
 " Vim beeping go to the hell... {{{
 set noerrorbells
-set novisualbell
+set visualbell
 set t_vb=
+set belloff=all
 " }}}
 " Set this, if you will open all windows for files specified
 " on the commandline at vim startup.
