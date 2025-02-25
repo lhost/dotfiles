@@ -104,7 +104,7 @@
 	ui = true
 [core]
 	pager = less -F -X -R
-	whitespace = space-before-tab,indent-with-non-tab,tabwidth=4
+	whitespace = space-before-tab,tabwidth=4
 	quotePath = false
 	commitGraph = true
 	excludesfile = ~/.gitignore
