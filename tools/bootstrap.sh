@@ -169,6 +169,8 @@ for dir in ~/.config ~/.config/zsh ~/.local/.git ~/.local/zsh ~/.local/tig; do
 		mkdir -p $dir
 	fi
 done
+touch ~/.config/zsh/local.zsh
+touch ~/.local/zsh/local.zsh
 
 if [ ! -d ~/.config/dotfiles.git/ ]; then
 	cd ~/.config && git clone $DOTFILES_GIT_REPO dotfiles.git && cd dotfiles.git
